@@ -6,8 +6,8 @@
 <html lang="en">
 <head>
 
-    <link rel="shortcut icon" href="${pageContext.request.contextPath}/img/favicon.ico">
-    <link rel="icon" type="image/png" href="${pageContext.request.contextPath}/img/favicon.png">
+    <link rel="shortcut icon" href="${pageContext.request.contextPath}/favicon.ico">
+    <link rel="icon" type="image/png" href="${pageContext.request.contextPath}/favicon.png">
 
     <title>Products</title>
     <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
@@ -37,12 +37,14 @@
     <div class="navbar-inner">
         <div class="container">
             <div class="span9">
-                <a class="brand" style="padding: 0; padding-top: 10px; padding-right: 5px" href="${pageContext.request.contextPath}/"> <img alt='cloudbees logo' height='28'
-                                                                                  src='${pageContext.request.contextPath}/img/logo.png'/> Bees Shop
+                <a class="brand" style="padding: 0; padding-top: 10px; padding-right: 5px"
+                   href="${pageContext.request.contextPath}/"> <img alt='cloudbees logo' height='28'
+                                                                    src='${pageContext.request.contextPath}/img/logo.png'/>
+                    Bees Shop
                 </a>
                 <ul class="nav">
                     <li><a href="${pageContext.request.contextPath}/">Home</a></li>
-                    <li class="active"><a href="${pageContext.request.contextPath}/product/">Products</a></li>
+                    <li class="active"><a href="<c:url value="/product/"/>">Products</a></li>
                 </ul>
                 <form class="navbar-search pull-left" action="${pageContext.request.contextPath}/product/">
                     <input id="searchProduct" name="name" type="text" class="search-query input-medium"
@@ -68,16 +70,27 @@
             <div class="span1">
                 &nbsp;
                 <c:if test="${not empty product.photoUrl}">
-                    <img src="${product.photoUrl}" width="50"/>
+                    <img src="<c:url value="${product.photoUrl}"/>" width="50"/>
                 </c:if>
             </div>
             <div class="span11">
-                <h2><a href="${pageContext.request.contextPath}/product/${product.id}">${product.name}</a></h2>
+                <h2><a href="<c:url value="/product/${product.id}"/>">${product.name}</a></h2>
                 <br/>
-                <blockquote>${product.instructionsAsHtml}</blockquote>
+                <blockquote>${product.descriptionAsHtml}</blockquote>
             </div>
         </div>
     </c:forEach>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="span10 offset1">
+            <a class="btn btn-primary" href="${pageContext.request.contextPath}/product/create-form/"
+               title="Create Product">
+                <i class="icon-plus"></i>
+                Create product
+            </a>
+        </div>
+    </div>
 </div>
 </body>
 </html>

@@ -13,10 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.cloudbees.demo.beesshop.cart;
+package com.cloudbees.demo.beesshop.web;
 
-import com.cloudbees.demo.beesshop.product.Product;
-import com.cloudbees.demo.beesshop.product.ProductRepository;
+import com.cloudbees.demo.beesshop.domain.Product;
+import com.cloudbees.demo.beesshop.domain.ProductRepository;
+import com.cloudbees.demo.beesshop.domain.ShoppingCart;
+import com.cloudbees.demo.beesshop.domain.ShoppingCartRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +44,6 @@ public class ShoppingCartController {
     protected final AtomicInteger salesRevenueInCentsCounter = new AtomicInteger();
     protected final AtomicInteger salesItemsCounter = new AtomicInteger();
     protected final AtomicInteger salesOrdersCounter = new AtomicInteger();
-
     @Autowired
     ShoppingCartRepository shoppingCartRepository;
     @Autowired
@@ -78,6 +79,7 @@ public class ShoppingCartController {
         salesOrdersCounter.incrementAndGet();
 
         shoppingCartRepository.resetCurrentShoppingCart(request);
+
         return "redirect:/";
     }
 

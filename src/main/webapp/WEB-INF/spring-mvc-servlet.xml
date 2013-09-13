@@ -15,14 +15,82 @@
   ~ limitations under the License.
   -->
 <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:c="http://www.springframework.org/schema/c"
        xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+       xmlns:jee="http://www.springframework.org/schema/jee"
        xsi:schemaLocation="
+       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
-		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd">
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd
+		http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc.xsd
+        http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee.xsd
+         ">
 
+    <context:property-placeholder system-properties-mode="OVERRIDE" location="classpath:bees-shop.properties"/>
     <context:component-scan base-package="com.cloudbees.demo.beesshop"/>
-
+    <tx:annotation-driven/>
+    <aop:aspectj-autoproxy/>
     <context:mbean-export/>
 
-    <context:property-placeholder system-properties-mode="OVERRIDE"/>
+    <!-- AMAZON AWS -->
+
+    <bean id="awsCredentials" class="com.amazonaws.auth.BasicAWSCredentials"
+          c:accessKey="${aws_access_key}" c:secretKey="${aws_secret_key}"/>
+
+    <bean id="amazonS3FileStorageService" class="com.cloudbees.demo.beesshop.service.AmazonS3FileStorageService"
+          p:awsCredentials-ref="awsCredentials"
+          p:amazonS3BucketName="${aws_s3_bucket_name}"
+          p:amazonS3BucketBasePublicUrl="${aws_s3_bucket_base_public_url}"
+            />
+
+    <!-- MAIL SERVICE -->
+    <bean id="mailService" class="com.cloudbees.demo.beesshop.service.MailService"
+          p:fromAddress="${mail_from}"/>
+
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver"/>
+
+    <!-- JPA - HIBERNATE -->
+    <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean"
+          p:dataSource-ref="dataSource">
+        <property name="jpaVendorAdapter">
+            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"
+                  p:showSql="${jpa.showSql}" p:generateDdl="${jpa.generateDdl}"/>
+        </property>
+        <property name="persistenceUnitName" value="beesshop"/>
+        <property name="packagesToScan" value="com.cloudbees.demo.beesshop.domain"/>
+        <property name="persistenceProvider">
+            <bean class="org.hibernate.ejb.HibernatePersistence"/>
+        </property>
+    </bean>
+
+    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager"
+          p:entityManagerFactory-ref="entityManagerFactory"/>
+    <bean class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor"/>
+
+
+    <!-- MAIL-SESSION AND JDBC RESOURCES -->
+    <jdbc:embedded-database id="dataSource" type="HSQL"/>
+    <bean id="mailSession" class="com.cloudbees.demo.beesshop.util.MailSessionFactoryBean">
+        <property name="smtpProperties">
+            <props>
+                <prop key="mail.smtp.host">${mail_smtp_host}</prop>
+                <prop key="mail.smtp.port">${mail_smtp_port}</prop>
+                <prop key="mail.transport.protocol">smtp</prop>
+                <prop key="mail.smtp.starttls.enable">${mail_starttls}</prop>
+            </props>
+        </property>
+        <property name="smtpUser" value="${mail_smtp_username}"/>
+        <property name="smtpPassword" value="${mail_smtp_password}"/>
+    </bean>
+
+
+    <beans profile="javaee">
+        <jee:jndi-lookup id="mailSession" jndi-name="mail/SendGrid" resource-ref="true" expected-type="javax.mail.Session"/>
+        <jee:jndi-lookup id="dataSource" jndi-name="jdbc/beesshop" resource-ref="true" expected-type="javax.sql.DataSource"/>
+    </beans>
 </beans>

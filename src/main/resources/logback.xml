@@ -17,18 +17,27 @@
 <configuration scan="true" scanPeriod="30 seconds" debug="false">
 
     <contextName>demo-bees-shop</contextName>
+
     <jmxConfigurator/>
 
-   <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-      <encoder>
-         <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg %ex{0}%n</pattern>
-      </encoder>
-   </appender>
+    <contextListener class="ch.qos.logback.classic.jul.LevelChangePropagator">
+        <resetJUL>true</resetJUL>
+    </contextListener>
 
-    <logger name="audit" level="TRACE" />
-    <logger name="org.springframework.web" level="warn" />
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg %ex%n</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="audit" level="TRACE"/>
+    <logger name="org.springframework.web" level="warn"/>
+    <logger name="org.springframework.transaction" level="warn"/>
+    <logger name="org.springframework.jpa" level="warn"/>
+
+    <logger name="com.cloudbees" level="trace"/>
 
     <root level="warn">
-      <appender-ref ref="STDOUT" />
-   </root>
+        <appender-ref ref="STDOUT"/>
+    </root>
 </configuration>

@@ -7,8 +7,8 @@
 <head>
     <title>Shopping Cart</title>
 
-    <link rel="shortcut icon" href="${pageContext.request.contextPath}/img/favicon.ico">
-    <link rel="icon" type="image/png" href="${pageContext.request.contextPath}/img/favicon.png">
+    <link rel="shortcut icon" href="${pageContext.request.contextPath}/favicon.ico">
+    <link rel="icon" type="image/png" href="${pageContext.request.contextPath}/favicon.png">
 
     <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
     <!--[if lt IE 9]>
@@ -37,8 +37,10 @@
     <div class="navbar-inner">
         <div class="container">
             <div class="span9">
-                <a class="brand" style="padding: 0; padding-top: 10px; padding-right: 5px" href="${pageContext.request.contextPath}/"> <img alt='cloudbees logo' height='28'
-                                                                                  src='${pageContext.request.contextPath}/img/logo.png'/> Bees Shop
+                <a class="brand" style="padding: 0; padding-top: 10px; padding-right: 5px"
+                   href="${pageContext.request.contextPath}/"> <img alt='cloudbees logo' height='28'
+                                                                    src='${pageContext.request.contextPath}/img/logo.png'/>
+                    Bees Shop
                 </a>
                 <ul class="nav">
                     <li><a href="${pageContext.request.contextPath}/">Home</a></li>
@@ -97,7 +99,7 @@
                                         <a href="${pageContext.request.contextPath}/product/${product.id}">${product.name}</a>
                                     </strong>
                                     <br/>
-                                    <blockquote>${product.instructionsAsHtml}</blockquote>
+                                    <blockquote>${product.descriptionAsHtml}</blockquote>
                                 </td>
                                 <td>${product.prettyPrice}</td>
                                 <td>

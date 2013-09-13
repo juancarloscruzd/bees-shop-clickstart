@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.cloudbees.demo.beesshop.cart;
+package com.cloudbees.demo.beesshop.domain;
 
-import com.cloudbees.demo.beesshop.product.Product;
+import com.cloudbees.demo.beesshop.domain.Product;
 import org.springframework.util.Assert;
 
 import javax.annotation.Nonnull;

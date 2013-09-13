@@ -13,25 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.cloudbees.demo.beesshop;
+package com.cloudbees.demo.beesshop.web;
 
-import com.cloudbees.demo.beesshop.cart.ShoppingCart;
-import com.cloudbees.demo.beesshop.cart.ShoppingCartRepository;
+import com.cloudbees.demo.beesshop.domain.ShoppingCart;
+import com.cloudbees.demo.beesshop.domain.ShoppingCartRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.multipart.MultipartResolver;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.servlet.config.annotation.*;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 
 /**
  * @author <a href="mailto:cleclerc@cloudbees.com">Cyrille Le Clerc</a>
@@ -39,7 +39,7 @@ import javax.servlet.http.HttpServletResponse;
 @Configuration
 @EnableWebMvc
 public class WebConfig extends WebMvcConfigurerAdapter {
-
+    private final Logger logger = LoggerFactory.getLogger(getClass());
     @Autowired
     private ShoppingCartRepository shoppingCartRepository;
 
@@ -49,6 +49,11 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         registry.addResourceHandler("/css/**").addResourceLocations("/css/");
         registry.addResourceHandler("/img/**").addResourceLocations("/img/");
         registry.addResourceHandler("/js/**").addResourceLocations("/js/");
+    }
+
+    @Override
+    public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
+        configurer.enable();
     }
 
     @Bean
@@ -72,4 +77,11 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         };
         registry.addInterceptor(addShoppingCartInRequestHandlerInterceptor);
     }
+
+    @Bean(name = "multipartResolver")
+    public MultipartResolver multipartResolver() {
+        logger.warn("build multipartResolver");
+        return new CommonsMultipartResolver();
+    }
+
 }

@@ -13,44 +13,45 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.cloudbees.demo.beesshop.product;
+package com.cloudbees.demo.beesshop.domain;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.text.NumberFormat;
 import java.util.*;
 
 /**
  * @author <a href="mailto:cleclerc@cloudbees.com">Cyrille Le Clerc</a>
  */
+@Entity
 public class Product implements Comparable<Product>, Serializable {
 
-    private List<Ingredient> ingredients = new ArrayList<Ingredient>();
-    private String instructions;
+    private String description;
     private String name;
-    private long id;
+    @Id
+    @GeneratedValue
+    private Long id;
     private String photoUrl;
     private String photoCredit;
-
     /**
      * URL of the product recipe that has been used
      */
-    private String recipeUrl;
-    private Deque<String> comments = new LinkedList<String>();
-
+    private String productUrl;
+    @ElementCollection(fetch = FetchType.EAGER)
+    private Set<String> tags = new TreeSet<>();
+    @OneToMany(fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
+    private List<Comment> comments = new ArrayList<>();
     private int priceInCents;
 
-    public String getInstructionsAsHtml() {
-        return instructions == null ? "" : instructions.replace("\n", "<br />\n");
-    }
-
-    public Collection<String> getIngredientNames() {
-        List<String> ingredientNames = new ArrayList<String>();
-        for (Ingredient ingredient : this.ingredients) {
-            ingredientNames.add(ingredient.getName());
-        }
-        return ingredientNames;
+    public String getDescriptionAsHtml() {
+        return description == null ? "" : description.replace("\n", "<br />\n");
     }
 
     @Override
@@ -65,24 +66,22 @@ public class Product implements Comparable<Product>, Serializable {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public List<Ingredient> getIngredients() {
-        return ingredients;
+    @Nullable
+    public String getDescription() {
+        return description;
     }
 
-    public void setIngredients(List<Ingredient> ingredients) {
-        this.ingredients = ingredients;
+    public void setDescription(@Nullable String description) {
+        this.description = description;
     }
 
-    public String getInstructions() {
-        return instructions;
-    }
-
-    public void setInstructions(String instructions) {
-        this.instructions = instructions;
+    public Product withDescription(@Nullable String description) {
+        this.description = description;
+        return this;
     }
 
     public String getName() {
@@ -114,49 +113,43 @@ public class Product implements Comparable<Product>, Serializable {
         this.photoCredit = photoCredit;
     }
 
-    public String getRecipeUrl() {
-        return recipeUrl;
+    public String getProductUrl() {
+        return productUrl;
     }
 
-    public void setRecipeUrl(String recipeUrl) {
-        this.recipeUrl = recipeUrl;
+    public void setProductUrl(String recipeUrl) {
+        this.productUrl = recipeUrl;
     }
 
-    public Deque<String> getComments() {
-        return comments;
+    public void addComment(String comment, String remoteIp) {
+        comments.add(new Comment(comment, remoteIp, new Timestamp(System.currentTimeMillis())));
     }
 
-    public void setComments(Deque<String> comments) {
-        this.comments = comments;
+    /**
+     * @return read only
+     */
+    @Nonnull
+    public ImmutableList<Comment> getComments() {
+        return ImmutableList.copyOf(Lists.reverse(comments));
     }
 
-    public Product withId(long id) {
+    public Product withId(@Nullable Long id) {
         setId(id);
         return this;
     }
 
-    public Product withIngredient(String quantity, String name) {
-        this.ingredients.add(new Ingredient(quantity, name));
-        return this;
-    }
-
-    public Product withInstructions(String instructions) {
-        setInstructions(instructions);
-        return this;
-    }
-
-    public Product withName(String name) {
+    public Product withName(@Nullable String name) {
         setName(name);
         return this;
     }
 
-    public Product withPhotoUrl(String photoUrl) {
+    public Product withPhotoUrl(@Nullable String photoUrl) {
         setPhotoUrl(photoUrl);
         return this;
     }
 
-    public Product withRecipeUrl(String recipeUrl) {
-        setRecipeUrl(recipeUrl);
+    public Product withProductUrl(String productUrl) {
+        setProductUrl(productUrl);
         return this;
     }
 
@@ -164,19 +157,35 @@ public class Product implements Comparable<Product>, Serializable {
         return priceInCents;
     }
 
-    /**
-     * Price in dollars
-     */
-    public String getPrettyPrice(){
-        BigDecimal priceInDollars = new BigDecimal(getPriceInCents()).movePointLeft(2);
-        return NumberFormat.getCurrencyInstance(Locale.US).format(priceInDollars);
-    }
-
     public void setPriceInCents(int priceInCents) {
         this.priceInCents = priceInCents;
     }
 
-    public Product withPriceInCents(int priceInCents) {
+    public Set<String> getTags() {
+        return tags;
+    }
+
+    public void setTags(Set<String> tags) {
+        this.tags = tags;
+    }
+
+    public Product withTags(String... tags) {
+        for (String tag : tags) {
+            this.tags.add(tag);
+        }
+        return this;
+    }
+
+    /**
+     * Price in dollars, empty {@link String} if price is <code>null</code>
+     */
+    @Nonnull
+    public String getPrettyPrice() {
+        BigDecimal priceInDollars = new BigDecimal(getPriceInCents()).movePointLeft(2);
+        return NumberFormat.getCurrencyInstance(Locale.US).format(priceInDollars);
+    }
+
+    public Product withPriceInCents(Integer priceInCents) {
         this.priceInCents = priceInCents;
         return this;
     }
@@ -198,37 +207,11 @@ public class Product implements Comparable<Product>, Serializable {
         return (int) (id ^ (id >>> 32));
     }
 
-    public static class Ingredient implements Serializable {
-
-        private String name;
-        private String quantity;
-
-        public Ingredient(String quantity, String name) {
-            this.quantity = quantity;
-            this.name = name;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public String getQuantity() {
-            return quantity;
-        }
-
-        public void setQuantity(String quantity) {
-            this.quantity = quantity;
-        }
-
-        @Override
-        public String toString() {
-            return "Ingredient{" +
-                    "quantity='" + quantity + '\'' +
-                    '}';
-        }
+    @Override
+    public String toString() {
+        return "Product{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
     }
 }

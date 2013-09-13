@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.cloudbees.demo.beesshop.cart;
+package com.cloudbees.demo.beesshop.domain;
 
 import org.springframework.stereotype.Repository;
 

@@ -8,9 +8,8 @@
 <head>
     <title>Bees Shop Demo</title>
 
-    <link rel="shortcut icon" href=${pageContext.request.contextPath}/img/favicon.ico
-    ">
-    <link rel="icon" type="image/png" href="${pageContext.request.contextPath}/img/favicon.png">
+    <link rel="shortcut icon" href=${pageContext.request.contextPath}/favicon.ico">
+    <link rel="icon" type="image/png" href="${pageContext.request.contextPath}/favicon.png">
 
     <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
     <!--[if lt IE 9]>
@@ -56,6 +55,9 @@
                     ${shoppingCart.itemsCount} items
                     ${shoppingCart.prettyPrice}
                 </a>
+                <a class="btn" href="${pageContext.request.contextPath}/configuration/" title="Shopping Cart">
+                    <i class="icon-cog"></i>
+                </a>
             </div>
         </div>
     </div>
@@ -75,7 +77,7 @@
             </div>
         </div>
         <div class="span6">
-            <div class="hero-unit">
+            <div class="hero-unit pagination-centered">
                 <img src="img/bee-7179227681_2b3da2bb7a_n.jpg"/><br/>
                 <a style="font-size: xx-small" href="http://www.flickr.com/photos/80180331@N02/7179227681">&copy; All Rights Reserved - AAUACC</a>
             </div>

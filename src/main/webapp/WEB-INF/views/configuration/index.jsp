@@ -1,7 +1,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="s" %>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
-<%@ page session="false" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -66,80 +65,19 @@
 
 <div class="container">
     <div class="page-header">
-        <h1>${product.name} <a href="<c:url value="/product/${product.id}/edit-form"/>" class="btn js-btn"><i
-                class="icon-edit"></i> Edit</a></h1>
+        <h1>Bees Shop Configuration</h1>
     </div>
 
     <div class="row">
-        <div class="span2">
-            <c:if test="${not empty product.photoUrl}">
-                <img src="${product.photoUrl}" width="100"/>
-            </c:if>
-        </div>
-        <div class="span7">
-            <p>${product.descriptionAsHtml}</p>
-        </div>
-        <div class="span3">
-            <div class="well">
-                <p>Price: ${product.prettyPrice}</p>
+        <ul>
+            <li><a href="${pageContext.request.contextPath}/configuration/aws">Amazon AWS Configuration</a></li>
+        </ul>
+    </div>
 
-                <form class="form-inline" action="${pageContext.request.contextPath}/cart/add" method="post">
-                    <input name="product" value="${product.id}" type="hidden">
-                    <select name="quantity" style="width: 50px" class="btn js-btn">
-                        <option>1</option>
-                        <option>2</option>
-                        <option>3</option>
-                        <option>4</option>
-                        <option>5</option>
-                    </select>
-                    <button type="submit" class="btn js-btn">
-                        <i class="icon-shopping-cart"></i> Add
-                    </button>
-                </form>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="span7 offset2">
-            <em><a href="${product.productUrl}" target="_blank">${product.productUrl}</a></em>
-        </div>
-    </div>
-    <div class="row">
-        <div class="span7 offset2">
-            <hr/>
-            <h4>Comments</h4>
-            <c:forEach items="${product.comments}" var="comment">
-                <a href="#${comment.id}">written by ${comment.remoteIp} at ${comment.prettyTimestamp}</a><br/>
-                <em>"${comment.message}"</em>
-                <br/>
-            </c:forEach>
-            <form action="${pageContext.request.contextPath}/product/${id}/comment" method="post" class="form-inline">
-                <fieldset>
-                    <input id="comment" name="comment" type="text" placeholder="Add a comment..."/>
-                    <button type="submit" class="btn js-btn">
-                        <i class="icon-comment"></i> Comment
-                    </button>
-                </fieldset>
-            </form>
-        </div>
-        <div class="span3">
-            <div class="well">
-                <p>Mail a friend</p>
-                <form:form id="sendByEmail" action="${pageContext.request.contextPath}/product/${id}/mail"
-                           method="post"
-                           modelAttribute="product">
-                    <fieldset>
-                        <input id="recipientEmail" name="recipientEmail" type="text" placeholder="Email" class="span2"/>
-                    </fieldset>
-                    <div class="btn-group">
-                        <button type="submit" class="btn js-btn">
-                            <i class="icon-envelope"></i> Send
-                        </button>
-                    </div>
-                </form:form>
-            </div>
-        </div>
-    </div>
+</div>
+</div>
+
+</div>
 </div>
 </body>
 </html>

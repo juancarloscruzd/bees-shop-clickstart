@@ -1,7 +1,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="s" %>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
-<%@ page session="false" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -66,80 +65,86 @@
 
 <div class="container">
     <div class="page-header">
-        <h1>${product.name} <a href="<c:url value="/product/${product.id}/edit-form"/>" class="btn js-btn"><i
-                class="icon-edit"></i> Edit</a></h1>
+        <h1>Amazon AWS Configuration</h1>
     </div>
 
-    <div class="row">
-        <div class="span2">
-            <c:if test="${not empty product.photoUrl}">
-                <img src="${product.photoUrl}" width="100"/>
-            </c:if>
-        </div>
-        <div class="span7">
-            <p>${product.descriptionAsHtml}</p>
-        </div>
-        <div class="span3">
-            <div class="well">
-                <p>Price: ${product.prettyPrice}</p>
 
-                <form class="form-inline" action="${pageContext.request.contextPath}/cart/add" method="post">
-                    <input name="product" value="${product.id}" type="hidden">
-                    <select name="quantity" style="width: 50px" class="btn js-btn">
-                        <option>1</option>
-                        <option>2</option>
-                        <option>3</option>
-                        <option>4</option>
-                        <option>5</option>
-                    </select>
-                    <button type="submit" class="btn js-btn">
-                        <i class="icon-shopping-cart"></i> Add
-                    </button>
-                </form>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="span7 offset2">
-            <em><a href="${product.productUrl}" target="_blank">${product.productUrl}</a></em>
-        </div>
-    </div>
-    <div class="row">
-        <div class="span7 offset2">
-            <hr/>
-            <h4>Comments</h4>
-            <c:forEach items="${product.comments}" var="comment">
-                <a href="#${comment.id}">written by ${comment.remoteIp} at ${comment.prettyTimestamp}</a><br/>
-                <em>"${comment.message}"</em>
-                <br/>
-            </c:forEach>
-            <form action="${pageContext.request.contextPath}/product/${id}/comment" method="post" class="form-inline">
+    <div class="span12">
+        <c:choose>
+            <c:when test="${empty warningException}">
+                <div class="alert alert-success">
+                    Amazon AWS Configuration is valid
+                </div>
+            </c:when>
+            <c:otherwise>
+                <div class="alert alert-error">
+                    Amazon AWS Configuration is invalid <br/>
+                    <pre style="overflow-x: auto;">${warningException}</pre>
+                </div>
+            </c:otherwise>
+        </c:choose>
+        <div class="row">
+            <div class="span6">
+                <form:form id="form" action="${pageContext.request.contextPath}/configuration/aws/credentials" method="put">
                 <fieldset>
-                    <input id="comment" name="comment" type="text" placeholder="Add a comment..."/>
-                    <button type="submit" class="btn js-btn">
-                        <i class="icon-comment"></i> Comment
-                    </button>
+                    <legend>AWS Credentials</legend>
+                    <div class="control-group">
+                        <label class="control-label" for="awsAccessKeyId">AWS Access Key ID</label>
+
+                        <div class="controls">
+                            <input id="awsAccessKeyId" name="awsAccessKeyId" type="text" value="${awsAccessKeyId}"
+                                   class="span4">
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="awsSecretKey">AWS Secret Key</label>
+
+                        <div class="controls">
+                            <input id="awsSecretKey" name="awsSecretKey" type="text" value="${awsSecretKey}"
+                                   class="span4">
+                        </div>
+                    </div>
                 </fieldset>
-            </form>
-        </div>
-        <div class="span3">
-            <div class="well">
-                <p>Mail a friend</p>
-                <form:form id="sendByEmail" action="${pageContext.request.contextPath}/product/${id}/mail"
-                           method="post"
-                           modelAttribute="product">
+                <div class="btn-group">
+                    <button type="submit" class="btn js-btn">Save AWS Credentials</button>
+                </div>
+            </div>
+            </form:form>
+            <div class="span6">
+                <form:form id="form" action="${pageContext.request.contextPath}/configuration/aws/s3" method="put">
                     <fieldset>
-                        <input id="recipientEmail" name="recipientEmail" type="text" placeholder="Email" class="span2"/>
+                        <legend>Amazon S3</legend>
+                        <div class="control-group">
+                            <label class="control-label" for="amazonS3BucketName">Amazon S3 Bucket</label>
+
+                            <div class="controls">
+                                <input id="amazonS3BucketName" name="amazonS3BucketName" type="text"
+                                       value="${amazonS3BucketName}" class="span4">
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label" for="amazonS3BucketBasePublicUrl">Amazon S3 Bucket Base Public
+                                URL
+                                (can
+                                be a CDN URL or the bucket URL)</label>
+
+                            <div class="controls">
+                                <input id="amazonS3BucketBasePublicUrl" name="amazonS3BucketBasePublicUrl" type="text"
+                                       value="${amazonS3BucketBasePublicUrl}" class="span4">
+                            </div>
+                        </div>
                     </fieldset>
                     <div class="btn-group">
-                        <button type="submit" class="btn js-btn">
-                            <i class="icon-envelope"></i> Send
-                        </button>
+                        <button type="submit" class="btn js-btn">Save Amazon S3 Configuration</button>
                     </div>
                 </form:form>
             </div>
         </div>
+
     </div>
+</div>
+
+</div>
 </div>
 </body>
 </html>
