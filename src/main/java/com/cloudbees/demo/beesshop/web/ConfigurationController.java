@@ -35,13 +35,9 @@ public class ConfigurationController {
     @Autowired
     private AmazonS3FileStorageService amazonS3FileStorageService;
 
-    @RequestMapping(method = RequestMethod.GET, value = "/configuration")
-    public String home() {
-        return "configuration/index";
-    }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/configuration/aws")
-    public ModelAndView viewAwsConfiguration() {
+    @RequestMapping(method = RequestMethod.GET, value = "/configuration")
+    public ModelAndView viewConfiguration() {
 
         Map<String, Object> model = Maps.newHashMap();
         model.put("awsAccessKeyId", amazonS3FileStorageService.getAwsAccessKeyId());
@@ -53,7 +49,7 @@ public class ConfigurationController {
             model.put("warningException", e);
         }
 
-        return new ModelAndView("configuration/aws", model);
+        return new ModelAndView("configuration/index", model);
     }
 
     @RequestMapping(method = RequestMethod.PUT, value = "/configuration/aws/credentials")
@@ -61,7 +57,7 @@ public class ConfigurationController {
             @RequestParam("awsAccessKeyId") String awsAccessKeyId,
             @RequestParam("awsSecretKey") String awsSecretKey) {
         amazonS3FileStorageService.setAmazonCredentials(awsAccessKeyId, awsSecretKey);
-        return "redirect:/configuration/aws";
+        return "redirect:/configuration";
     }
 
     @RequestMapping(method = RequestMethod.PUT, value = "/configuration/aws/s3")
@@ -70,6 +66,6 @@ public class ConfigurationController {
             @RequestParam("amazonS3BucketBasePublicUrl") String amazonS3BucketBasePublicUrl) {
         amazonS3FileStorageService.setAmazonS3BucketName(amazonS3BucketName);
         amazonS3FileStorageService.setAmazonS3BucketBasePublicUrl(amazonS3BucketBasePublicUrl);
-        return "redirect:/configuration/aws";
+        return "redirect:/configuration";
     }
 }

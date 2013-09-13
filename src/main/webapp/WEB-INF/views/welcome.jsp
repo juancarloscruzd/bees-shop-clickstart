@@ -8,8 +8,8 @@
 <head>
     <title>Bees Shop Demo</title>
 
-    <link rel="shortcut icon" href=${pageContext.request.contextPath}/favicon.ico">
-    <link rel="icon" type="image/png" href="${pageContext.request.contextPath}/favicon.png">
+    <link rel="shortcut icon" href=${pageContext.request.contextPath}/favicon.icon"/>
+    <link rel="icon" type="image/png" href="${pageContext.request.contextPath}/favicon.png"/>
 
     <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
     <!--[if lt IE 9]>
@@ -38,11 +38,13 @@
             <div class="span9">
                 <a class="brand" style="padding: 0; padding-top: 10px; padding-right: 5px"
                    href="${pageContext.request.contextPath}/"> <img alt='cloudbees logo' height='28'
-                                                                    src='${pageContext.request.contextPath}/img/logo.png'/> Bees Shop
+                                                                    src='${pageContext.request.contextPath}/img/logo.png'/>
+                    Bees Shop
                 </a>
                 <ul class="nav">
                     <li class="active"><a href="${pageContext.request.contextPath}/">Home</a></li>
                     <li><a href="${pageContext.request.contextPath}/product/">Products</a></li>
+                    <li><a href="${pageContext.request.contextPath}/configuration/">Configuration</a></li>
                 </ul>
                 <form class="navbar-search pull-left" action="${pageContext.request.contextPath}/product/">
                     <input id="searchProduct" name="name" type="text" class="search-query input-medium"
@@ -54,9 +56,6 @@
                     <i class="icon-shopping-cart"></i>
                     ${shoppingCart.itemsCount} items
                     ${shoppingCart.prettyPrice}
-                </a>
-                <a class="btn" href="${pageContext.request.contextPath}/configuration/" title="Shopping Cart">
-                    <i class="icon-cog"></i>
                 </a>
             </div>
         </div>
@@ -76,11 +75,8 @@
                 </p>
             </div>
         </div>
-        <div class="span6">
-            <div class="hero-unit pagination-centered">
-                <img src="img/bee-7179227681_2b3da2bb7a_n.jpg"/><br/>
-                <a style="font-size: xx-small" href="http://www.flickr.com/photos/80180331@N02/7179227681">&copy; All Rights Reserved - AAUACC</a>
-            </div>
+        <div class="span6 pagination-centered">
+            <img src="img/000012989784.jpg"/><br/>
         </div>
     </div>
 
