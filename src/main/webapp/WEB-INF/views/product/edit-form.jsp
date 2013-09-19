@@ -133,7 +133,7 @@
                         <fieldset>
                             <legend>Photo</legend>
                             <c:if test="${not empty product.photoUrl}">
-                                <img src="${product.photoUrl}" width="100"/>
+                                <img src="${product.getPhotoPublicUrl(amazonS3FileStorageService)}" width="100" />
                                 <br/>
                             </c:if>
                             <c:choose>

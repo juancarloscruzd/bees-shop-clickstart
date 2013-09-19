@@ -11,7 +11,10 @@
     "order": 100,
 
     "runtime": {
-        "type": "tomcat7"
+        "type": "tomcat7",
+        "app-variables": {
+            "spring.profiles.active": "javaee"
+        }
     },
     "databases": [
         {

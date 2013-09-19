@@ -82,24 +82,28 @@
 
 
     <!-- MAIL-SESSION AND JDBC RESOURCES -->
-    <jdbc:embedded-database id="dataSource" type="HSQL"/>
     <bean id="mailSession" class="com.cloudbees.demo.beesshop.util.MailSessionFactoryBean">
         <property name="smtpProperties">
             <props>
-                <prop key="mail.smtp.host">${mail_smtp_host}</prop>
-                <prop key="mail.smtp.port">${mail_smtp_port}</prop>
+                <prop key="mail.smtp.host">${SENDGRID_SMTP_HOST}</prop>
+                <prop key="mail.smtp.port">${SENDGRID_SMTP_PORT}</prop>
                 <prop key="mail.transport.protocol">smtp</prop>
                 <prop key="mail.smtp.starttls.enable">${mail_starttls}</prop>
             </props>
         </property>
-        <property name="smtpUser" value="${mail_smtp_username}"/>
-        <property name="smtpPassword" value="${mail_smtp_password}"/>
+        <property name="smtpUser" value="${SENDGRID_USERNAME}"/>
+        <property name="smtpPassword" value="${SENDGRID_PASSWORD}"/>
+        <property name="debug" value="${SENDGRID_DEBUG}"/>
     </bean>
 
+    <jdbc:embedded-database id="dataSource" type="HSQL"/>
 
     <beans profile="javaee">
+        <!--
+        temporarily use manually created mail session
         <jee:jndi-lookup id="mailSession" jndi-name="mail/SendGrid" resource-ref="true"
                          expected-type="javax.mail.Session"/>
+        -->
         <jee:jndi-lookup id="dataSource" jndi-name="jdbc/beesshop" resource-ref="true"
                          expected-type="javax.sql.DataSource"/>
     </beans>

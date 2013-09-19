@@ -37,6 +37,7 @@ public class MailSessionFactoryBean implements FactoryBean<Session>, Initializin
     private Session mailSession;
     private String smtpUser;
     private String smtpPassword;
+    private boolean debug;
 
     @Override
     public void afterPropertiesSet() throws Exception {
@@ -54,6 +55,7 @@ public class MailSessionFactoryBean implements FactoryBean<Session>, Initializin
                 }
             });
         }
+        mailSession.setDebug(debug);
     }
 
     @Override
@@ -81,5 +83,9 @@ public class MailSessionFactoryBean implements FactoryBean<Session>, Initializin
 
     public void setSmtpPassword(String smtpPassword) {
         this.smtpPassword = smtpPassword;
+    }
+
+    public void setDebug(boolean debug) {
+        this.debug = debug;
     }
 }

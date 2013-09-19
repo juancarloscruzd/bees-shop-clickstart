@@ -71,7 +71,7 @@ public class MailService {
                 + cocktailPageUrl;
         msg.setContent(message, "text/plain");
 
-        Transport.send(msg);
+        mailSession.getTransport().send(msg);
         auditLogger.info("Sent to {} product '{}'", recipient, product.getName());
         sentEmailCounter.incrementAndGet();
     }
