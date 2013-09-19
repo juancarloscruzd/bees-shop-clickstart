@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Map;
 
@@ -35,14 +36,13 @@ public class ConfigurationController {
     @Autowired
     private AmazonS3FileStorageService amazonS3FileStorageService;
 
-
     @RequestMapping(method = RequestMethod.GET, value = "/configuration")
     public ModelAndView viewConfiguration() {
 
         Map<String, Object> model = Maps.newHashMap();
         model.put("awsAccessKeyId", amazonS3FileStorageService.getAwsAccessKeyId());
         model.put("amazonS3BucketName", amazonS3FileStorageService.getAmazonS3BucketName());
-        model.put("amazonS3BucketBasePublicUrl", amazonS3FileStorageService.getAmazonS3BucketBasePublicUrl());
+        model.put("amazonCloudFrontDomainName", amazonS3FileStorageService.getAmazonCloudFrontDomainName());
         try {
             amazonS3FileStorageService.checkConfiguration();
         } catch (RuntimeException e) {
@@ -55,17 +55,28 @@ public class ConfigurationController {
     @RequestMapping(method = RequestMethod.PUT, value = "/configuration/aws/credentials")
     public String updateAwsCredentials(
             @RequestParam("awsAccessKeyId") String awsAccessKeyId,
-            @RequestParam("awsSecretKey") String awsSecretKey) {
+            @RequestParam("awsSecretKey") String awsSecretKey,
+            RedirectAttributes redirectAttributes) {
         amazonS3FileStorageService.setAmazonCredentials(awsAccessKeyId, awsSecretKey);
+        redirectAttributes.addFlashAttribute("successMessage", "AWS Credentials Configuration saved");
         return "redirect:/configuration";
     }
 
     @RequestMapping(method = RequestMethod.PUT, value = "/configuration/aws/s3")
     public String updateAwsS3BucketConfiguration(
             @RequestParam("amazonS3BucketName") String amazonS3BucketName,
-            @RequestParam("amazonS3BucketBasePublicUrl") String amazonS3BucketBasePublicUrl) {
+            RedirectAttributes redirectAttributes) {
         amazonS3FileStorageService.setAmazonS3BucketName(amazonS3BucketName);
-        amazonS3FileStorageService.setAmazonS3BucketBasePublicUrl(amazonS3BucketBasePublicUrl);
+        redirectAttributes.addFlashAttribute("successMessage", "Amazon S3 Configuration saved");
+        return "redirect:/configuration";
+    }
+
+    @RequestMapping(method = RequestMethod.PUT, value = "/configuration/aws/cloudfront")
+    public String updateAwsCloudFrontConfiguration(
+            @RequestParam("amazonCloudFrontDomainName") String amazonCloudFrontDomainName, RedirectAttributes redirectAttributes) {
+        amazonS3FileStorageService.setAmazonCloudFrontDomainName(amazonCloudFrontDomainName);
+
+        redirectAttributes.addFlashAttribute("successMessage", "Amazon CloudFront Configuration saved");
         return "redirect:/configuration";
     }
 }

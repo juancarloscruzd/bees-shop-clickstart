@@ -49,7 +49,7 @@ public class AmazonS3FileStorageService implements InitializingBean {
     protected final Logger logger = LoggerFactory.getLogger(getClass());
     private final Random random = new Random();
     private String amazonS3BucketName;
-    private String amazonS3BucketBasePublicUrl;
+    private String amazonCloudFrontDomainName;
     private AWSCredentials awsCredentials;
     private AmazonS3 amazonS3;
     private Map<String, String> contentTypeByFileExtension = new HashMap<String, String>() {
@@ -116,7 +116,21 @@ public class AmazonS3FileStorageService implements InitializingBean {
         String fileName = Joiner.on(".").skipNulls().join(Math.abs(random.nextLong()), extension);
         amazonS3.putObject(amazonS3BucketName, fileName, in, objectMetadata);
 
-        return amazonS3BucketBasePublicUrl + fileName;
+        return "s3://" + amazonS3BucketName + "/" + fileName;
+    }
+
+    @Nonnull
+    public String getPublicUrl(@Nonnull String url) {
+        if (url.startsWith("s3://" + amazonS3BucketName + "/")) {
+            String baseUrl = url.substring(("s3://" + amazonS3BucketName).length());
+            if (Strings.isNullOrEmpty(amazonCloudFrontDomainName)) {
+                return "https://s3.amazonaws.com/" + amazonS3BucketName + "/" + baseUrl;
+            } else {
+                return "http://" + amazonCloudFrontDomainName + "/" + baseUrl;
+            }
+        } else {
+            return url;
+        }
     }
 
     public String getAwsAccessKeyId() {
@@ -132,18 +146,17 @@ public class AmazonS3FileStorageService implements InitializingBean {
         this.amazonS3BucketName = amazonS3BucketName;
     }
 
-    public String getAmazonS3BucketBasePublicUrl() {
-        return amazonS3BucketBasePublicUrl;
-    }
-
-    @Required
-    public void setAmazonS3BucketBasePublicUrl(String amazonS3BucketBasePublicUrl) {
-        this.amazonS3BucketBasePublicUrl = amazonS3BucketBasePublicUrl;
-    }
-
     @Required
     public void setAwsCredentials(AWSCredentials awsCredentials) {
         this.awsCredentials = awsCredentials;
         this.amazonS3 = new AmazonS3Client(awsCredentials);
+    }
+
+    public String getAmazonCloudFrontDomainName() {
+        return amazonCloudFrontDomainName;
+    }
+
+    public void setAmazonCloudFrontDomainName(String amazonCloudFrontDomainName) {
+        this.amazonCloudFrontDomainName = amazonCloudFrontDomainName;
     }
 }

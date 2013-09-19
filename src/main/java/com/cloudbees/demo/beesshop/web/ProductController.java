@@ -32,6 +32,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
@@ -180,11 +181,18 @@ public class ProductController {
             throw new ProductNotFoundException(id);
         }
         model.addAttribute(product);
+
+        try {
+            fileStorageService.checkConfiguration();
+        } catch (RuntimeException e) {
+            model.addAttribute("amazonS3FileStorageServiceFailure", e.toString());
+        }
         return "product/edit-form";
     }
 
     @RequestMapping(value = "/product/{id}/mail", method = RequestMethod.POST)
-    public String sendEmail(@PathVariable long id, @RequestParam("recipientEmail") String recipientEmail, HttpServletRequest request) {
+    public String sendEmail(@PathVariable long id, @RequestParam("recipientEmail") String recipientEmail,
+                            HttpServletRequest request, RedirectAttributes redirectAttributes) {
         Product product = productRepository.get(id);
         if (product == null) {
             throw new ProductNotFoundException(id);
@@ -193,8 +201,12 @@ public class ProductController {
             String productPageUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
                     + request.getContextPath() + "/product/" + id;
             mailService.sendProductEmail(product, recipientEmail, productPageUrl);
+
+            redirectAttributes.addFlashAttribute("mailSuccessMessage", "Email sent!");
+
         } catch (MessagingException e) {
-            throw Throwables.propagate(e);
+            redirectAttributes.addFlashAttribute("mailFailureMessage", "Failure sending email: " + e.getMessage());
+            logger.warn("Failure sending message to " + recipientEmail, e);
         }
         return "redirect:/product/" + product.getId();
     }

@@ -2,6 +2,8 @@
 <%@ taglib uri="http://www.springframework.org/tags" prefix="s" %>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 <%@ page session="false" %>
+<jsp:useBean id="amazonS3FileStorageService" type="com.cloudbees.demo.beesshop.service.AmazonS3FileStorageService"
+             scope="application"/>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -45,7 +47,7 @@
                 <ul class="nav">
                     <li><a href="${pageContext.request.contextPath}/">Home</a></li>
                     <li class="active"><a href="${pageContext.request.contextPath}/product/">Products</a></li>
-                    <li><a href="${pageContext.request.contextPath}/configuration/">Configuration</a></li>
+                    <li><a href="${pageContext.request.contextPath}/configuration/"><i class="icon-cog"></i> Configuration</a></li>
                 </ul>
                 <form class="navbar-search pull-left" action="${pageContext.request.contextPath}/product/">
                     <input id="searchProduct" name="name" type="text" class="search-query input-medium"
@@ -71,7 +73,7 @@
             <div class="span1">
                 &nbsp;
                 <c:if test="${not empty product.photoUrl}">
-                    <img src="<c:url value="${product.photoUrl}"/>" width="50"/>
+                    <img src="${product.getPhotoPublicUrl(amazonS3FileStorageService)}" width="50"/>
                 </c:if>
             </div>
             <div class="span11">

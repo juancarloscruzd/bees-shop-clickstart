@@ -2,6 +2,8 @@
 <%@ taglib uri="http://www.springframework.org/tags" prefix="s" %>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 <%@ page session="false" %>
+<jsp:useBean id="amazonS3FileStorageService" type="com.cloudbees.demo.beesshop.service.AmazonS3FileStorageService"
+             scope="application"/>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -45,7 +47,7 @@
                 <ul class="nav">
                     <li><a href="${pageContext.request.contextPath}/">Home</a></li>
                     <li class="active"><a href="${pageContext.request.contextPath}/product/">Products</a></li>
-                    <li><a href="${pageContext.request.contextPath}/configuration/">Configuration</a></li>
+                    <li><a href="${pageContext.request.contextPath}/configuration/"><i class="icon-cog"></i> Configuration</a></li>
                 </ul>
                 <form class="navbar-search pull-left" action="${pageContext.request.contextPath}/product/">
                     <input id="searchProduct" name="name" type="text" class="search-query input-medium"
@@ -74,7 +76,7 @@
     <div class="row">
         <div class="span2">
             <c:if test="${not empty product.photoUrl}">
-                <img src="${product.photoUrl}" width="100"/>
+                <img src="${product.getPhotoPublicUrl(amazonS3FileStorageService)}" width="100" />
             </c:if>
         </div>
         <div class="span7">
@@ -125,18 +127,28 @@
         </div>
         <div class="span3">
             <div class="well">
-                <p>Mail a friend</p>
                 <form:form id="sendByEmail" action="${pageContext.request.contextPath}/product/${id}/mail"
                            method="post"
                            modelAttribute="product">
                     <fieldset>
+                        <legend>Mail a friend</legend>
+                        <c:if test="${not empty mailSuccessMessage}">
+                            <p><span class="label label-success"><i class="icon-ok"></i> ${mailSuccessMessage}</span>
+                            </p>
+                        </c:if>
+                        <c:if test="${not empty mailFailureMessage}">
+                            <p><span class="label label-warning"><i
+                                    class="icon-exclamation-sign"></i> ${mailFailureMessage}</span>
+                            </p>
+                        </c:if>
                         <input id="recipientEmail" name="recipientEmail" type="text" placeholder="Email" class="span2"/>
+
+                        <div class="btn-group">
+                            <button type="submit" class="btn js-btn">
+                                <i class="icon-envelope"></i> Send
+                            </button>
+                        </div>
                     </fieldset>
-                    <div class="btn-group">
-                        <button type="submit" class="btn js-btn">
-                            <i class="icon-envelope"></i> Send
-                        </button>
-                    </div>
                 </form:form>
             </div>
         </div>

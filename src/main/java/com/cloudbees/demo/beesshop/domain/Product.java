@@ -15,6 +15,9 @@
  */
 package com.cloudbees.demo.beesshop.domain;
 
+import com.cloudbees.demo.beesshop.service.AmazonS3FileStorageService;
+import com.google.common.base.Preconditions;
+import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 
@@ -98,6 +101,31 @@ public class Product implements Comparable<Product>, Serializable {
 
     public void setPhotoUrl(String photoUrl) {
         this.photoUrl = photoUrl;
+    }
+
+    /**
+     * <p>Builds the photo public URL</p>
+     * <ul>
+     * <li>If the {@link #photoUrl} is NOT a {@code s3://} url, return the {@link #photoUrl}</li>
+     * <li>else if the {@link com.cloudbees.demo.beesshop.service.AmazonS3FileStorageService#getAmazonCloudFrontDomainName()} is defined, return the CDN URL of the photo</li>
+     * <li>else return the S3 bucket {@code http} URL</li>
+     * </ul>
+     */
+    @Nullable
+    public String getPhotoPublicUrl(@Nonnull AmazonS3FileStorageService storageService) {
+        Preconditions.checkNotNull(storageService, "Given AmazonS3FileStorageService can NOT be null");
+        if (photoUrl == null) {
+            return photoUrl;
+        } else if (photoUrl.startsWith("s3://" + storageService.getAmazonS3BucketName() + "/")) {
+            String rootRelativeUrl = photoUrl.substring(("s3://" + storageService.getAmazonS3BucketName()).length());
+            if (Strings.isNullOrEmpty(storageService.getAmazonCloudFrontDomainName())) {
+                return "https://s3.amazonaws.com/" + storageService.getAmazonS3BucketName() + rootRelativeUrl;
+            } else {
+                return "http://" + storageService.getAmazonCloudFrontDomainName() + rootRelativeUrl;
+            }
+        } else {
+            return photoUrl;
+        }
     }
 
     public Product withPhotoCredit(String photoCredit) {

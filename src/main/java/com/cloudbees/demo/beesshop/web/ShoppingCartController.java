@@ -28,6 +28,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -71,7 +73,7 @@ public class ShoppingCartController {
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/cart/buy")
-    public String buy(HttpServletRequest request) {
+    public String buy(HttpServletRequest request,  RedirectAttributes redirectAttributes) {
         ShoppingCart shoppingCart = shoppingCartRepository.getCurrentShoppingCart(request);
 
         salesRevenueInCentsCounter.addAndGet(shoppingCart.getPriceInCents());
@@ -79,7 +81,7 @@ public class ShoppingCartController {
         salesOrdersCounter.incrementAndGet();
 
         shoppingCartRepository.resetCurrentShoppingCart(request);
-
+        redirectAttributes.addFlashAttribute("successMessage", "Thanks for buying on the Bees Shop");
         return "redirect:/";
     }
 

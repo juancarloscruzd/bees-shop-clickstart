@@ -44,7 +44,7 @@
                 <ul class="nav">
                     <li><a href="${pageContext.request.contextPath}/">Home</a></li>
                     <li><a href="${pageContext.request.contextPath}/product/">Products</a></li>
-                    <li class="active"><a href="${pageContext.request.contextPath}/configuration/">Configuration</a>
+                    <li class="active"><a href="${pageContext.request.contextPath}/configuration/"><i class="icon-cog"></i> Configuration</a>
                     </li>
                 </ul>
                 <form class="navbar-search pull-left" action="${pageContext.request.contextPath}/product/">
@@ -72,16 +72,21 @@
 
 
     <div class="span12">
+        <c:if test="${not empty successMessage}">
+            <div class="alert alert-success">
+                <i class="icon-ok"></i> ${successMessage}
+            </div>
+        </c:if>
         <c:choose>
             <c:when test="${empty warningException}">
                 <div class="alert alert-success">
-                    Amazon AWS Configuration is valid
+                    <i class="icon-ok"></i> Amazon AWS Configuration is valid
                 </div>
             </c:when>
             <c:otherwise>
                 <div class="alert alert-error">
-                    Amazon AWS Configuration is invalid <br/>
-                    <pre style="overflow-x: auto;">${warningException}</pre>
+                    <i class="icon-exclamation-sign"></i> Amazon AWS Configuration is invalid <br/>
+                    <pre style="overflow-x: auto;"><code>${warningException}</code></pre>
                 </div>
             </c:otherwise>
         </c:choose>
@@ -90,30 +95,30 @@
             <div class="span6">
                 <form:form id="form" action="${pageContext.request.contextPath}/configuration/aws/credentials"
                            method="put">
-                <fieldset>
-                    <legend>AWS Credentials</legend>
-                    <div class="control-group">
-                        <label class="control-label" for="awsAccessKeyId">AWS Access Key ID</label>
+                    <fieldset>
+                        <legend>AWS Credentials</legend>
+                        <div class="control-group">
+                            <label class="control-label" for="awsAccessKeyId">AWS Access Key ID</label>
 
-                        <div class="controls">
-                            <input id="awsAccessKeyId" name="awsAccessKeyId" type="text" value="${awsAccessKeyId}"
-                                   class="span4">
+                            <div class="controls">
+                                <input id="awsAccessKeyId" name="awsAccessKeyId" type="text" value="${awsAccessKeyId}"
+                                       class="span4">
+                            </div>
                         </div>
-                    </div>
-                    <div class="control-group">
-                        <label class="control-label" for="awsSecretKey">AWS Secret Key</label>
+                        <div class="control-group">
+                            <label class="control-label" for="awsSecretKey">AWS Secret Key</label>
 
-                        <div class="controls">
-                            <input id="awsSecretKey" name="awsSecretKey" type="text" value="${awsSecretKey}"
-                                   class="span4">
+                            <div class="controls">
+                                <input id="awsSecretKey" name="awsSecretKey" type="text" value="${awsSecretKey}"
+                                       class="span4">
+                            </div>
                         </div>
-                    </div>
-                </fieldset>
-                <div class="btn-group">
-                    <button type="submit" class="btn js-btn">Save AWS Credentials</button>
-                </div>
+                        <div class="btn-group">
+                            <button type="submit" class="btn js-btn">Save AWS Credentials</button>
+                        </div>
+                    </fieldset>
+                </form:form>
             </div>
-            </form:form>
             <div class="span6">
                 <form:form id="form" action="${pageContext.request.contextPath}/configuration/aws/s3" method="put">
                     <fieldset>
@@ -126,23 +131,40 @@
                                        value="${amazonS3BucketName}" class="span4">
                             </div>
                         </div>
-                        <div class="control-group">
-                            <label class="control-label" for="amazonS3BucketBasePublicUrl">Amazon S3 Bucket Base Public
-                                URL
-                                (can
-                                be a CDN URL or the bucket URL)</label>
-
-                            <div class="controls">
-                                <input id="amazonS3BucketBasePublicUrl" name="amazonS3BucketBasePublicUrl" type="text"
-                                       value="${amazonS3BucketBasePublicUrl}" class="span4">
-                            </div>
+                        <div class="btn-group">
+                            <button type="submit" class="btn js-btn">Save Amazon S3 Configuration</button>
                         </div>
                     </fieldset>
-                    <div class="btn-group">
-                        <button type="submit" class="btn js-btn">Save Amazon S3 Configuration</button>
-                    </div>
                 </form:form>
             </div>
+        </div>
+        <div class="row">
+            <div class="span6">
+                <form:form id="form" action="${pageContext.request.contextPath}/configuration/aws/cloudfront"
+                           method="put">
+                    <fieldset>
+                        <legend>Amazon CloudFront</legend>
+                        <div class="control-group">
+                            <label class="control-label" for="amazonCloudFrontDomainName">Amazon CloudFront Domain
+                                name</label>
+
+                            <div class="controls">
+                                <input id="amazonCloudFrontDomainName" name="amazonCloudFrontDomainName" type="text"
+                                       value="${amazonCloudFrontDomainName}"
+                                       class="span4">
+                                <c:if test="${not empty amazonCloudFrontDomainName}">
+                                    <br/>
+                                    <i>Base CDN URL: http://${amazonCloudFrontDomainName}</i>
+                                </c:if>
+                            </div>
+                        </div>
+                        <div class="btn-group">
+                            <button type="submit" class="btn js-btn">Save CloudFront Configuration</button>
+                        </div>
+                    </fieldset>
+                </form:form>
+            </div>
+
         </div>
     </div>
 </div>

@@ -44,7 +44,7 @@
                 <ul class="nav">
                     <li><a href="${pageContext.request.contextPath}/">Home</a></li>
                     <li class="active"><a href="${pageContext.request.contextPath}/product/">Products</a></li>
-                    <li><a href="${pageContext.request.contextPath}/configuration/">Configuration</a></li>
+                    <li><a href="${pageContext.request.contextPath}/configuration/"><i class="icon-cog"></i> Configuration</a></li>
                 </ul>
                 <form class="navbar-search pull-left" action="${pageContext.request.contextPath}/product/">
                     <input id="searchProduct" name="name" type="text" class="search-query input-medium"

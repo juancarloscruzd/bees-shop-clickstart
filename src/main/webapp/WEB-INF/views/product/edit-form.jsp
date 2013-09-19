@@ -44,7 +44,8 @@
                 <ul class="nav">
                     <li><a href="${pageContext.request.contextPath}/">Home</a></li>
                     <li class="active"><a href="${pageContext.request.contextPath}/product/">Products</a></li>
-                    <li><a href="${pageContext.request.contextPath}/configuration/">Configuration</a></li>
+                    <li><a href="${pageContext.request.contextPath}/configuration/"><i class="icon-cog"></i>
+                        Configuration</a></li>
                 </ul>
                 <form class="navbar-search pull-left" action="${pageContext.request.contextPath}/product/">
                     <input id="searchProduct" name="name" type="text" class="search-query input-medium"
@@ -87,7 +88,8 @@
                                 <label class="control-label" for="priceInCents">Price in cents</label>
 
                                 <div class="controls">
-                                    <input id="priceInCents" priceInCents="name" type="text" value="${product.priceInCents}" class="span4">
+                                    <input id="priceInCents" priceInCents="name" type="text"
+                                           value="${product.priceInCents}" class="span4">
                                 </div>
                             </div>
                             <div class="control-group">
@@ -134,14 +136,26 @@
                                 <img src="${product.photoUrl}" width="100"/>
                                 <br/>
                             </c:if>
-                            <input name="photo" type="file" class="btn js-btn"/>
-                        </fieldset>
-                    </div>
-                    <div class="row">
+                            <c:choose>
+                                <c:when test="${empty amazonS3FileStorageServiceFailure}">
+                                    <input name="photo" type="file" class="btn js-btn"/>
+                                    <br/>
 
-                        <div class="btn-group">
-                            <button type="submit" class="btn js-btn">Upload Photo</button>
-                        </div>
+                                    <div class="btn-group">
+                                        <button type="submit" class="btn js-btn">Upload Photo</button>
+                                    </div>
+                                </c:when>
+                                <c:otherwise>
+                                    <div class="alert alert-error">
+                                        <i class="icon-exclamation-sign"></i> Invalid Amazon S3 Configuration, file
+                                        upload disabled.<br/>
+                                        <pre style="overflow-x: auto;"><code>${amazonS3FileStorageServiceFailure}</code></pre>
+
+                                    </div>
+                                </c:otherwise>
+
+                            </c:choose>
+                        </fieldset>
                     </div>
                 </div>
             </form:form>

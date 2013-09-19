@@ -8,7 +8,8 @@
 <head>
     <title>Bees Shop Demo</title>
 
-    <link rel="shortcut icon" href=${pageContext.request.contextPath}/favicon.icon"/>
+    <link rel="shortcut icon" href=${pageContext.request.contextPath}/favicon.icon
+    "/>
     <link rel="icon" type="image/png" href="${pageContext.request.contextPath}/favicon.png"/>
 
     <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
@@ -44,7 +45,8 @@
                 <ul class="nav">
                     <li class="active"><a href="${pageContext.request.contextPath}/">Home</a></li>
                     <li><a href="${pageContext.request.contextPath}/product/">Products</a></li>
-                    <li><a href="${pageContext.request.contextPath}/configuration/">Configuration</a></li>
+                    <li><a href="${pageContext.request.contextPath}/configuration/"><i class="icon-cog"></i>Configuration</a>
+                    </li>
                 </ul>
                 <form class="navbar-search pull-left" action="${pageContext.request.contextPath}/product/">
                     <input id="searchProduct" name="name" type="text" class="search-query input-medium"
@@ -68,7 +70,9 @@
         <div class="span6">
             <div class="hero-unit">
                 <h2>Enter the bees shop!</h2>
-
+                <c:if test="${not empty successMessage}">
+                    <p><span class="label label-success"><i class="icon-ok"></i> ${successMessage}</span></p>
+                </c:if>
                 <p>
                     <a class="btn btn-primary btn-large" href="${pageContext.request.contextPath}/product/"> Shopping
                         zone! </a>

@@ -37,6 +37,14 @@
     <aop:aspectj-autoproxy/>
     <context:mbean-export/>
 
+    <bean class="org.springframework.web.context.support.ServletContextAttributeExporter">
+        <property name="attributes">
+            <map>
+                <entry key="amazonS3FileStorageService" value-ref="amazonS3FileStorageService"/>
+            </map>
+        </property>
+    </bean>
+
     <!-- AMAZON AWS -->
 
     <bean id="awsCredentials" class="com.amazonaws.auth.BasicAWSCredentials"
@@ -45,7 +53,7 @@
     <bean id="amazonS3FileStorageService" class="com.cloudbees.demo.beesshop.service.AmazonS3FileStorageService"
           p:awsCredentials-ref="awsCredentials"
           p:amazonS3BucketName="${aws_s3_bucket_name}"
-          p:amazonS3BucketBasePublicUrl="${aws_s3_bucket_base_public_url}"
+          p:amazonCloudFrontDomainName="${aws_cloudfront_domain_name}"
             />
 
     <!-- MAIL SERVICE -->
@@ -90,7 +98,9 @@
 
 
     <beans profile="javaee">
-        <jee:jndi-lookup id="mailSession" jndi-name="mail/SendGrid" resource-ref="true" expected-type="javax.mail.Session"/>
-        <jee:jndi-lookup id="dataSource" jndi-name="jdbc/beesshop" resource-ref="true" expected-type="javax.sql.DataSource"/>
+        <jee:jndi-lookup id="mailSession" jndi-name="mail/SendGrid" resource-ref="true"
+                         expected-type="javax.mail.Session"/>
+        <jee:jndi-lookup id="dataSource" jndi-name="jdbc/beesshop" resource-ref="true"
+                         expected-type="javax.sql.DataSource"/>
     </beans>
 </beans>
