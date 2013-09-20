@@ -2,6 +2,12 @@
 
 ## Application Overview
 
+
+<img alt="Bees Shop - CloudBees MySQL" src="https://raw.github.com/CloudBees-community/bees-shop-clickstart/master/src/site/img/bees-shop-screenshot.png" style="width: 70%;"/>
+
+<img alt="Bees Shop - CloudBees MySQL" src="https://raw.github.com/CloudBees-community/bees-shop-clickstart/master/src/site/img/bees-shop-screenshot-2.png" style="width: 70%;"/>
+
+
 ## Architecture Overview
 
 <img alt="Bees Shop - CloudBees MySQL" src="https://raw.github.com/CloudBees-community/bees-shop-clickstart/master/src/site/img/bees-shop-architecture.png" style="width: 70%;"/>
