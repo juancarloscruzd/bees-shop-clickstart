@@ -71,6 +71,16 @@ public class BeesShopInitializer implements InitializingBean {
                         .withPhotoCredit("http://huneynet.fatcow.com/store/media/West_Texas_Cotton.jpg")
                         .withTags("honey"));
 
+                em.persist(new Product()
+                        .withName("Honey Shot- 5g sachet Eucalyptus Honey (100%)")
+                        .withDescription("Honey 'Shots' is a product developed on the basis of an athlete’s needs to maintain energy levels when training it then moved to mountain biking as cyclists wanted an alternative to synthesised sports energy bars and sweets. ...")
+                        .withPriceInCents(100)
+                        .withPhotoUrl("/img/Sports-Energy-Shot-web.png")
+                        .withPhotoCredit("http://www.thehivehoneyshop.co.uk/product_images/thumbs/t_Sports-Energy-Shot-web.jpg")
+                        .withProductUrl("http://www.thehivehoneyshop.co.uk/itemdetail.asp?itemid=770")
+                        .withTags("honey", "beverage"));
+
+
             } else {
                 logger.info("Products found in the database, don't insert new ones");
             }
