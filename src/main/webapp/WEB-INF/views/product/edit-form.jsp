@@ -133,7 +133,7 @@
                         <fieldset>
                             <legend>Photo</legend>
                             <c:if test="${not empty product.photoUrl}">
-                                <img src="${product.getPhotoPublicUrl(amazonS3FileStorageService)}" width="100" />
+                                <img src="${product.getPhotoPublicUrl(amazonS3FileStorageService)}" width="100"/>
                                 <br/>
                             </c:if>
                             <c:choose>
@@ -150,6 +150,8 @@
                                         <i class="icon-exclamation-sign"></i> Invalid Amazon S3 Configuration, file
                                         upload disabled.<br/>
                                         <pre style="overflow-x: auto;"><code>${amazonS3FileStorageServiceFailure}</code></pre>
+                                        <i class="icon-hand-right"></i> Fix it on <a href="<c:url value="/configuration"/>">
+                                        <i class="icon-cog"></i> Configuration</a> page.
 
                                     </div>
                                 </c:otherwise>
