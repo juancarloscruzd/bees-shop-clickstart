@@ -46,6 +46,7 @@ public class ShoppingCartController {
     protected final AtomicInteger salesRevenueInCentsCounter = new AtomicInteger();
     protected final AtomicInteger salesItemsCounter = new AtomicInteger();
     protected final AtomicInteger salesOrdersCounter = new AtomicInteger();
+
     @Autowired
     ShoppingCartRepository shoppingCartRepository;
     @Autowired

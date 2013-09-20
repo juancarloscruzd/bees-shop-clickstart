@@ -15,7 +15,6 @@
  */
 package com.cloudbees.demo.beesshop.domain;
 
-import com.cloudbees.demo.beesshop.domain.Product;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
@@ -50,7 +49,7 @@ public class ProductRepository {
         }
         List result = query.getResultList();
 
-        logger.debug("find({}): {}", name, result);
+        logger.trace("find({}): {}", name, result);
         return result;
     }
 
