@@ -71,5 +71,35 @@ bees config:set -a beesshop -P aws_cloudfront_domain_name=YOUR_DOMAIN.cloudfront
 bees config:set -a beesshop -P mail_from=webmaster@beesshop.org
 ```
 
+#### Spring Profile
 
+```
+bees config:update -a www src/main/config/cloudbees-config-bees-shop.xml
+```
+
+with `cloudbees-config-bees-shop.xml`
+
+```xml
+<!--
+Run:
+
+bees config:update -a www src/main/config/cloudbees-config-bees-shop-clc.xml
+-->
+<config>
+    <!-- SPRING PROFILE-->
+    <param name="spring.profiles.active" value="javaee"/>
+
+    <!-- AMAZON AWS-->
+    <!-- aws credentials -->
+    <param name="aws_access_key" value="YOUR_ACCESS_KEY"/>
+    <param name="aws_secret_key" value="YOUR_SECRET_KEY"/>
+    <!-- amazon s3 -->
+    <param name="aws_s3_bucket_name" value="bees-shop"/>
+    <!-- amazon cloudfront-->
+    <param name="aws_cloudfront_domain_name" value="YOUR_CLOUDFRONT_DOMAIN.cloudfront.net"/>
+
+    <!-- MAIL -->
+    <param name="mail_from" value="webmaster@beesshop.org"/>
+</config>
+```
 
