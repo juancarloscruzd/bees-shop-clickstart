@@ -46,8 +46,8 @@ On CloudBees, as you don't have access to the file system, we recommand to overr
 
 The Spring configuration would look like
 
-```
-<beans ...">
+```xml
+<beans ...>
 
     <context:property-placeholder system-properties-mode="OVERRIDE" location="classpath:bees-shop-dev-env.properties"/>
 
@@ -72,10 +72,11 @@ Once the application is able to override configuration parameters with externali
 
 Sample
 
-```
+```sh
 bees config:set -a MYAPP aws_access_key=123456
 ```
 
+The combination of Spring Property Placeholder with CloudBees CLI is a best practice to manage environment specific configuration parameters on CloudBees platform. 
 
 # Create application manually
 
