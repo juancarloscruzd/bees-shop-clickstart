@@ -17,6 +17,8 @@ package com.cloudbees.demo.beesshop.web;
 
 import com.cloudbees.demo.beesshop.service.AmazonS3FileStorageService;
 import com.google.common.collect.Maps;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,6 +34,7 @@ import java.util.Map;
  */
 @Controller
 public class ConfigurationController {
+    protected final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
     private AmazonS3FileStorageService amazonS3FileStorageService;
@@ -46,6 +49,8 @@ public class ConfigurationController {
         try {
             amazonS3FileStorageService.checkConfiguration();
         } catch (RuntimeException e) {
+            logger.warn("Exception checking AWS configuration", e);
+
             model.put("warningException", e);
         }
 
