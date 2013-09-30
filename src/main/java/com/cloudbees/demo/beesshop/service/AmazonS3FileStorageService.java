@@ -85,13 +85,16 @@ public class AmazonS3FileStorageService implements InitializingBean {
     }
 
     public void checkConfiguration() throws RuntimeException {
+        if(Strings.isNullOrEmpty(amazonS3BucketName)) {
+            throw new RuntimeException("Amazon S3 bucket name is not defined");
+        }
         try {
             if (!amazonS3.doesBucketExist(amazonS3BucketName)) {
                 throw new RuntimeException("Bucket '" + amazonS3BucketName + "' not found for user '" + awsCredentials.getAWSAccessKeyId() + "'");
             }
         } catch (AmazonS3Exception e) {
             if (e.getStatusCode() == 403 && "SignatureDoesNotMatch".equals(e.getErrorCode())) {
-                throw new RuntimeException("Invalid credentials AWSAccessKeyId='" + awsCredentials.getAWSAccessKeyId() + "', AWSSecretKey=****", e);
+                throw new RuntimeException("Invalid credentials AWSAccessKeyId='" + awsCredentials.getAWSAccessKeyId() + "', AWSSecretKey=**** to access bucket '" + amazonS3BucketName + "'", e);
             } else {
                 throw e;
             }
