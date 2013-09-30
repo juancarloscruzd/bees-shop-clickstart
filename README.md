@@ -33,7 +33,7 @@ The photos uploaded while editing the products are saved in an Amazon S3 bucket 
 
 #### Serving images directly from S3 server
 
-The images rendered in web browsers are directly server by Amazon S3 without going through the Java server.
+The images rendered in web browsers are directly server by Amazon S3 without going through the Java server:
 
 ##### Grant read access on the Amazon S3 bucket to everyone
 
