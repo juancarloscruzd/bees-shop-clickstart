@@ -110,6 +110,7 @@ public class Product implements Comparable<Product>, Serializable {
      * <li>else if the {@link com.cloudbees.demo.beesshop.service.AmazonS3FileStorageService#getAmazonCloudFrontDomainName()} is defined, return the CDN URL of the photo</li>
      * <li>else return the S3 bucket {@code http} URL</li>
      * </ul>
+     * <p>Note: the {@link AmazonS3FileStorageService} could be injected in the bean with Spring Load Time Weaving</p>
      */
     @Nullable
     public String getPhotoPublicUrl(@Nonnull AmazonS3FileStorageService storageService) {
