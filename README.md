@@ -27,10 +27,76 @@
 
 <img alt="Bees Shop - Amazon S3" src="https://raw.github.com/CloudBees-community/bees-shop-clickstart/master/src/site/img/bees-shop-s3-direct.png" style="width: 50%;"/>
 
+#### Saving uploaded photos to Amazon S3
+
+The photos uploaded while editing the products are saved in an Amazon S3 bucket using [Amazon SDK for Java](http://aws.amazon.com/sdkforjava/). See [`ProductController.updatePhoto()`](https://github.com/CloudBees-community/bees-shop-clickstart/blob/master/src/main/java/com/cloudbees/demo/beesshop/web/ProductController.java#L105) and [`AmazonS3FileStorageService.storeFile()`](https://github.com/CloudBees-community/bees-shop-clickstart/blob/master/src/main/java/com/cloudbees/demo/beesshop/service/AmazonS3FileStorageService.java#L117).
+
+#### Serving images directly from S3 server
+
+The images rendered in web browsers are directly server by Amazon S3 without going through the Java server.
+
+##### Grant read access on the Amazon S3 bucket to everyone
+
+Edit the policy of your Amazon S3 bucket and allow `s3:GetObject` to everyone.
+
+```json
+{
+	"Version": "2008-10-17",
+	"Statement": [
+		{
+			"Sid": "AllowEveryoneRead",
+			"Effect": "Allow",
+			"Principal": {
+				"AWS": "*"
+			},
+			"Action": "s3:GetObject",
+			"Resource": "arn:aws:s3:::YOUR-BUCKET-NAME/*"
+		}
+	]
+}
+```
+
+Where `YOUR-BUCKET-NAME` is the name of your Amazon S3 Bucket.
+
+##### Use the Amazon S3 public URL in the HTML code
+
+The HTML `<img src="..."/>` tag must use the Amazon S3 bucket public URL.
+
+Sample in [`view.jsp`](https://github.com/CloudBees-community/bees-shop-clickstart/blob/master/src/main/webapp/WEB-INF/views/product/view.jsp#L79)
+
+```jsp
+<img src="${product.getPhotoPublicUrl(amazonS3FileStorageService)}" width="100" />
+```
+
+With Java URL accessor [`Photo.getPhotoPublicUrl(AmazonS3FileStorageService)`](https://github.com/CloudBees-community/bees-shop-clickstart/blob/master/src/main/java/com/cloudbees/demo/beesshop/domain/Product.java#L115):
+
+
+```
+public String getPhotoPublicUrl(AmazonS3FileStorageService storageService) {
+    if (photoUrl == null) {
+        return null;
+    } else if (photoUrl.startsWith("s3://" + storageService.getAmazonS3BucketName() + "/")) {
+        String rootRelativeUrl = photoUrl.substring(("s3://" + storageService.getAmazonS3BucketName()).length());
+        return "https://s3.amazonaws.com/" + storageService.getAmazonS3BucketName() + rootRelativeUrl;
+    } else {
+        return photoUrl;
+    }
+}
+```
+
+Note: the "AmazonS3FileStorageService" could have been injected in the "Product" bean with a `@Configurable` annotation and Spring Load Time Weaving (see CloudBees sample [here](https://github.com/CloudBees-community/spring-load-time-weaving-clickstart/)).
+
+##### Enhancement: using Amazon S3's static web site hosting feature
+
+Instead of using Amazon S3's default HTTPS url ("https://s3.amazonaws.com/YOUR-BUCKET-NAME/..."), you can use a custom domain name and a non SSL faster access using the "Static Website Hosting" feature of Amazon S3 (see [here](http://docs.aws.amazon.com/AmazonS3/latest/dev/WebsiteHosting.html)).
 
 ### Media library optimisation with Amazon CloudFront CDN
 
 <img alt="Bees Shop - Amazon CloudFront with Amazon S3" src="https://raw.github.com/CloudBees-community/bees-shop-clickstart/master/src/site/img/bees-shop-s3-and-cloudfront.png" style="width: 50%;"/>
+
+Note: you don't need to use Amazon S3's static web site hosting feature when you use a CloudFront CDN in front of your S3 bucket.
+
+
 
 ### Externalizing environment specific configuration parameters
 
