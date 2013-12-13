@@ -100,11 +100,14 @@
 
     <beans profile="javaee">
         <!--
+         override the  default embedded database by a JNDI datasource
+        -->
+        <jee:jndi-lookup id="dataSource" jndi-name="jdbc/beesshop" resource-ref="true"
+                         expected-type="javax.sql.DataSource"/>
+        <!--
         temporarily use manually created mail session
         <jee:jndi-lookup id="mailSession" jndi-name="mail/SendGrid" resource-ref="true"
                          expected-type="javax.mail.Session"/>
         -->
-        <jee:jndi-lookup id="dataSource" jndi-name="jdbc/beesshop" resource-ref="true"
-                         expected-type="javax.sql.DataSource"/>
     </beans>
 </beans>
