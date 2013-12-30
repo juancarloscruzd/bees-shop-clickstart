@@ -4,7 +4,7 @@
     "source": "git://github.com/CloudBees-community/bees-shop-clickstart.git",
     "description": "The Bees Shop demo",
     "doc-url": "https://github.com/CloudBees-community/bees-shop-clickstart/blob/master/README.md",
-    "app-package": "https://repository-community.forge.cloudbees.com/snapshot/com/cloudbees/demo/bees-shop-clickstart/1.0.0-SNAPSHOT/https://repository-community.forge.cloudbees.com/snapshot/com/cloudbees/demo/bees-shop-clickstart/1.0.0-SNAPSHOT/bees-shop-clickstart-1.0.0-20131213.192709-21.war",
+    "app-package": "https://repository-community.forge.cloudbees.com/snapshot/com/cloudbees/demo/bees-shop-clickstart/1.0.0-SNAPSHOT/bees-shop-clickstart-1.0.0-20131213.192709-21.war",
     "icon": "https://raw.github.com/CloudBees-community/bees-shop-clickstart/master/clickstart-icon.png",
 
     "supported-by": "cloudbees",
