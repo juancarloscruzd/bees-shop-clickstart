@@ -14,15 +14,14 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.cloudbees.demo</groupId>
     <artifactId>bees-shop-clickstart</artifactId>
     <name>bees-shop</name>
     <description>Bees Shop Demo</description>
     <packaging>war</packaging>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.0</version>
 
     <properties>
         <spring-framework.version>3.2.4.RELEASE</spring-framework.version>
@@ -274,7 +273,7 @@
     <url>https://github.com/CloudBees-community/bees-shop-clickstart</url>
     <scm>
         <connection>scm:git:https://github.com/CloudBees-community/bees-shop-clickstart.git</connection>
-      <tag>HEAD</tag>
+      <tag>bees-shop-clickstart-1.0.0</tag>
   </scm>
     <distributionManagement>
         <repository>
