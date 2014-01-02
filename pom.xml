@@ -21,7 +21,7 @@
     <name>bees-shop</name>
     <description>Bees Shop Demo</description>
     <packaging>war</packaging>
-    <version>1.0.0</version>
+    <version>1.0.1-SNAPSHOT</version>
 
     <properties>
         <spring-framework.version>3.2.4.RELEASE</spring-framework.version>
@@ -273,7 +273,7 @@
     <url>https://github.com/CloudBees-community/bees-shop-clickstart</url>
     <scm>
         <connection>scm:git:https://github.com/CloudBees-community/bees-shop-clickstart.git</connection>
-      <tag>bees-shop-clickstart-1.0.0</tag>
+      <tag>HEAD</tag>
   </scm>
     <distributionManagement>
         <repository>
